@@ -13,6 +13,7 @@ namespace Calculator.Calculators
         private const string MultiplicationSymbol = "*";
         private const string DivisionSymbol = "/";
         private const string Comma = ",";
+        private const string DivideError = "You can't divide by zero";
 
         #endregion
 
@@ -68,7 +69,7 @@ namespace Calculator.Calculators
             {
                 if (secondNumber == 0)
                 {
-                    return (0, "You can't divide by zero");
+                    return (0, DivideError);
                 }
 
                 return (firstNumber / secondNumber, null);
@@ -85,39 +86,46 @@ namespace Calculator.Calculators
 
         public string Calculate(string operation, double firstNumber, double secondNumber, out bool error)
         {
-            if (!string.IsNullOrEmpty(operation))
+            try
             {
-                error = false;
-                switch (operation)
+                if (!string.IsNullOrEmpty(operation))
                 {
-                    case AdditionSymbol:
+                    error = false;
+                    switch (operation)
                     {
-                        return Addition(firstNumber, secondNumber).ToString();
-                    }
-                    case SubtractionSymbol:
-                    {
-                        return Subtraction(firstNumber, secondNumber).ToString();
-                    }
-                    case MultiplicationSymbol:
-                    {
-                        return Multiplication(firstNumber, secondNumber).ToString();
-                    }
-                    case DivisionSymbol:
-                    {
-                        (double? result, string error) divisionResult = Division(firstNumber, secondNumber);
-                        if (divisionResult.result == 0 && !string.IsNullOrEmpty(divisionResult.error))
+                        case AdditionSymbol:
                         {
-                            error = true;
-                            return divisionResult.error;
+                            return Addition(firstNumber, secondNumber).ToString();
                         }
+                        case SubtractionSymbol:
+                        {
+                            return Subtraction(firstNumber, secondNumber).ToString();
+                        }
+                        case MultiplicationSymbol:
+                        {
+                            return Multiplication(firstNumber, secondNumber).ToString();
+                        }
+                        case DivisionSymbol:
+                        {
+                            (double result, string error) divisionResult = Division(firstNumber, secondNumber);
+                            if (divisionResult.result == 0 && !string.IsNullOrEmpty(divisionResult.error))
+                            {
+                                error = true;
+                                return divisionResult.error;
+                            }
 
-                        return divisionResult.result.ToString();
+                            return divisionResult.result.ToString();
+                        }
                     }
                 }
-            }
 
-            error = true;
-            return string.Empty;
+                error = true;
+                return string.Empty;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
 
         public string ValidateComma(string number)
