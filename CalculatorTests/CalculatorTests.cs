@@ -51,11 +51,11 @@ namespace CalculatorTests
         }
 
         [DataTestMethod]
-        [DataRow(4, 4, 1, (string)null)]
+        [DataRow(4, 4, 1, null)]
         [DataRow(100, 0, 0, "You can't divide by zero")]
-        [DataRow(0, 2, 0, (string)null)]
-        [DataRow(10, 20, 0.5, (string)null)]
-        [DataRow(10, -20, -0.5, (string)null)]
+        [DataRow(0, 2, 0, null)]
+        [DataRow(10, 20, 0.5, null)]
+        [DataRow(10, -20, -0.5, null)]
         public void Division(double x, double y, double expectedResult, string expectedError)
         {
             (double? result, string error) expected = (expectedResult, expectedError);
