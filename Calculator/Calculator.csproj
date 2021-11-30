@@ -55,11 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utils\Calculate.cs" />
-    <Compile Include="View\CalculatorView.xaml.cs">
+    <Compile Include="Calculators\BasicCalculator.cs" />
+    <Compile Include="Interfaces\ICalculate.cs" />
+    <Compile Include="Views\CalculatorView.xaml.cs">
       <DependentUpon>CalculatorView.xaml</DependentUpon>
     </Compile>
-    <Page Include="View\CalculatorView.xaml">
+    <Page Include="Views\CalculatorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -67,8 +68,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModel\CalculatorViewModel.cs" />
-    <Compile Include="Command\Command.cs" />
+    <Compile Include="ViewModels\CalculatorViewModel.cs" />
+    <Compile Include="Commands\Command.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -96,5 +97,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
