@@ -3,9 +3,6 @@ using System.Windows;
 
 namespace Calculator.Views
 {
-    /// <summary>
-    /// Logika interakcji dla klasy CalculatorView.xaml
-    /// </summary>
     public partial class CalculatorView : Window
     {
         #region Members

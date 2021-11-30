@@ -1,4 +1,5 @@
 ﻿using Calculator.Interfaces;
+using System;
 
 namespace Calculator.Calculators
 {
@@ -28,25 +29,54 @@ namespace Calculator.Calculators
 
         public double Addition(double firstNumber, double secondNumber)
         {
-            return firstNumber + secondNumber;
+            try
+            {
+                return firstNumber + secondNumber;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
         public double Subtraction(double firstNumber, double secondNumber)
         {
-            return firstNumber / secondNumber;
+            try
+            {
+                return firstNumber - secondNumber;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
 
         public double Multiplication(double firstNumber, double secondNumber)
         {
-            return firstNumber * secondNumber;
-        }
-        public (double? result, string error) Division(double firstNumber, double secondNumber)
-        {
-            if (secondNumber == 0)
+            try
             {
-                return (null, "You can't divide by zero");
+                return firstNumber * secondNumber;
             }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
 
-            return (firstNumber - secondNumber, null);
+        public (double result, string error) Division(double firstNumber, double secondNumber)
+        {
+            try
+            {
+                if (secondNumber == 0)
+                {
+                    return (0, "You can't divide by zero");
+                }
+
+                return (firstNumber / secondNumber, null);
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
         }
 
         #endregion
@@ -75,7 +105,7 @@ namespace Calculator.Calculators
                     case DivisionSymbol:
                     {
                         (double? result, string error) divisionResult = Division(firstNumber, secondNumber);
-                        if (divisionResult.result == null && !string.IsNullOrEmpty(divisionResult.error))
+                        if (divisionResult.result == 0 && !string.IsNullOrEmpty(divisionResult.error))
                         {
                             error = true;
                             return divisionResult.error;

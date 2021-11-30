@@ -85,135 +85,149 @@ namespace Calculator.ViewModels
 
         private void NumericButtonClick(string buttonNumber)
         {
-            if (!string.IsNullOrEmpty(buttonNumber))
+            try
             {
-                if (errorOperation)
+                if (!string.IsNullOrEmpty(buttonNumber))
                 {
-                    errorOperation = false;
-                    HelperResult = string.Empty;
-                }
+                    if (errorOperation)
+                    {
+                        errorOperation = false;
+                        HelperResult = string.Empty;
+                    }
 
-                if (InputNumber == Zero || operationButtonClicked || equalButtonClicked)
-                {
-                    equalButtonClicked = false;
-                    operationButtonClicked = false;
-                    InputNumber = buttonNumber;
-                    return;
-                }
+                    if (InputNumber == Zero || operationButtonClicked || equalButtonClicked)
+                    {
+                        equalButtonClicked = false;
+                        operationButtonClicked = false;
+                        InputNumber = buttonNumber;
+                        return;
+                    }
 
-                InputNumber += buttonNumber;
+                    InputNumber += buttonNumber;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
             }
         }
 
         private void OperationButtonClick(string buttonOperation)
         {
-            if (!string.IsNullOrEmpty(buttonOperation))
+            try
             {
-                InputNumber = basicCalculator.ValidateComma(InputNumber);
-
-                switch (buttonOperation)
+                if (!string.IsNullOrEmpty(buttonOperation))
                 {
-                    case Equal:
-                    {
-                        if (!errorOperation)
-                        {
-                            if (string.IsNullOrEmpty(actualOperation) && !equalButtonClicked)
-                            {
-                                HelperResult = InputNumber + Equal;
-                            }
-                            else if (string.IsNullOrEmpty(actualOperation) && equalButtonClicked)
-                            {
-                                HelperResult = resultNumber + lastOperation + lastInputNumber + Equal;
-                                InputNumber = basicCalculator?.Calculate(lastOperation, Convert.ToDouble(resultNumber), Convert.ToDouble(lastInputNumber), out errorOperation).ToString();
-                            }
-                            else
-                            {
-                                lastInputNumber = InputNumber;
-                                lastOperation = actualOperation;
+                    InputNumber = basicCalculator.ValidateComma(InputNumber);
 
-                                if (!string.IsNullOrEmpty(resultNumber) && !string.IsNullOrEmpty(InputNumber))
+                    switch (buttonOperation)
+                    {
+                        case Equal:
+                            {
+                                if (!errorOperation)
                                 {
-                                    HelperResult = resultNumber + actualOperation + InputNumber + Equal;
-                                    InputNumber = basicCalculator?.Calculate(actualOperation, Convert.ToDouble(resultNumber), Convert.ToDouble(InputNumber), out errorOperation).ToString();
+                                    if (string.IsNullOrEmpty(actualOperation) && !equalButtonClicked)
+                                    {
+                                        HelperResult = InputNumber + Equal;
+                                    }
+                                    else if (string.IsNullOrEmpty(actualOperation) && equalButtonClicked)
+                                    {
+                                        HelperResult = resultNumber + lastOperation + lastInputNumber + Equal;
+                                        InputNumber = basicCalculator?.Calculate(lastOperation, Convert.ToDouble(resultNumber), Convert.ToDouble(lastInputNumber), out errorOperation).ToString();
+                                    }
+                                    else
+                                    {
+                                        lastInputNumber = InputNumber;
+                                        lastOperation = actualOperation;
+
+                                        if (!string.IsNullOrEmpty(resultNumber) && !string.IsNullOrEmpty(InputNumber))
+                                        {
+                                            HelperResult = resultNumber + actualOperation + InputNumber + Equal;
+                                            InputNumber = basicCalculator?.Calculate(actualOperation, Convert.ToDouble(resultNumber), Convert.ToDouble(InputNumber), out errorOperation).ToString();
+                                        }
+                                    }
+
+                                    equalButtonClicked = true;
+                                    actualOperation = string.Empty;
+                                    resultNumber = InputNumber;
                                 }
+                                break;
                             }
-
-                            equalButtonClicked = true;
-                            actualOperation = string.Empty;
-                            resultNumber = InputNumber;
-                        }
-                        break;
-                    }
-                    case Delete:
-                    {
-                        if (string.IsNullOrEmpty(actualOperation) || equalButtonClicked)
-                        {
-                            HelperResult = string.Empty;
-                        }
-
-                        if (errorOperation)
-                        {
-                            errorOperation = false;
-                            resultNumber = string.Empty;
-                            HelperResult = string.Empty;
-                            InputNumber = Zero;
-                            return;
-                        }
-
-                        if (!string.IsNullOrEmpty(InputNumber) && InputNumber != Zero && !equalButtonClicked)
-                        {
-                            if (InputNumber.Trim().Length == 1)
+                        case Delete:
                             {
-                                InputNumber = Zero;
-                                return;
+                                if (string.IsNullOrEmpty(actualOperation) || equalButtonClicked)
+                                {
+                                    HelperResult = string.Empty;
+                                }
+
+                                if (errorOperation)
+                                {
+                                    errorOperation = false;
+                                    resultNumber = string.Empty;
+                                    HelperResult = string.Empty;
+                                    InputNumber = Zero;
+                                    return;
+                                }
+
+                                if (!string.IsNullOrEmpty(InputNumber) && InputNumber != Zero && !equalButtonClicked)
+                                {
+                                    if (InputNumber.Trim().Length == 1)
+                                    {
+                                        InputNumber = Zero;
+                                        return;
+                                    }
+
+                                    InputNumber = InputNumber.Remove(InputNumber.Trim().Length - 1);
+                                }
+                                break;
                             }
+                        case Cancel:
+                            {
+                                resultNumber = string.Empty;
+                                HelperResult = string.Empty;
+                                InputNumber = Zero;
+                                break;
+                            }
+                        case Comma:
+                            {
+                                if (string.IsNullOrEmpty(InputNumber) || operationButtonClicked || equalButtonClicked)
+                                {
+                                    InputNumber = Zero + Comma;
+                                    equalButtonClicked = false;
+                                    operationButtonClicked = false;
+                                }
 
-                            InputNumber = InputNumber.Remove(InputNumber.Trim().Length - 1);
-                        }
-                        break;
-                    }
-                    case Cancel:
-                    {
-                        resultNumber = string.Empty;
-                        HelperResult = string.Empty;
-                        InputNumber = Zero;
-                        break;
-                    }
-                    case Comma:
-                    {
-                        if (string.IsNullOrEmpty(InputNumber) || operationButtonClicked || equalButtonClicked)
-                        {
-                            InputNumber = Zero + Comma;
-                            equalButtonClicked = false;
-                            operationButtonClicked = false;
-                        }
+                                if (!InputNumber.Contains(Comma))
+                                {
+                                    InputNumber = InputNumber + Comma;
+                                }
 
-                        if (!InputNumber.Contains(Comma))
-                        {
-                            InputNumber = InputNumber + Comma;
-                        }
+                                break;
+                            }
+                        default:
+                            {
+                                operationButtonClicked = true;
+                                actualOperation = buttonOperation;
 
-                        break;
-                    }
-                    default:
-                    {
-                        operationButtonClicked = true;
-                        actualOperation = buttonOperation;
+                                if (errorOperation)
+                                {
+                                    errorOperation = false;
+                                    resultNumber = string.Empty;
+                                    HelperResult = string.Empty;
+                                    InputNumber = Zero;
+                                    return;
+                                }
 
-                        if (errorOperation)
-                        {
-                            errorOperation = false;
-                            resultNumber = string.Empty;
-                            HelperResult = string.Empty;
-                            InputNumber = Zero;
-                            return;
-                        }
-
-                        resultNumber = InputNumber;
-                        HelperResult = InputNumber + buttonOperation;
-                        break;
+                                resultNumber = InputNumber;
+                                HelperResult = InputNumber + buttonOperation;
+                                break;
+                            }
                     }
                 }
+            }
+            catch (Exception exception)
+            {
+                throw exception;
             }
         }
 
