@@ -28,6 +28,50 @@ namespace Calculator.Calculators
 
         #region ICalculate
 
+        public string Calculate(string operation, double firstNumber, double secondNumber, out bool error)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(operation))
+                {
+                    error = false;
+                    switch (operation)
+                    {
+                        case AdditionSymbol:
+                            {
+                                return Addition(firstNumber, secondNumber).ToString();
+                            }
+                        case SubtractionSymbol:
+                            {
+                                return Subtraction(firstNumber, secondNumber).ToString();
+                            }
+                        case MultiplicationSymbol:
+                            {
+                                return Multiplication(firstNumber, secondNumber).ToString();
+                            }
+                        case DivisionSymbol:
+                            {
+                                (double result, string error) divisionResult = Division(firstNumber, secondNumber);
+                                if (divisionResult.result == 0 && !string.IsNullOrEmpty(divisionResult.error))
+                                {
+                                    error = true;
+                                    return divisionResult.error;
+                                }
+
+                                return divisionResult.result.ToString();
+                            }
+                    }
+                }
+
+                error = true;
+                return string.Empty;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+        }
+
         public double Addition(double firstNumber, double secondNumber)
         {
             try
@@ -73,54 +117,6 @@ namespace Calculator.Calculators
                 }
 
                 return (firstNumber / secondNumber, null);
-            }
-            catch (Exception exception)
-            {
-                throw exception;
-            }
-        }
-
-        #endregion
-
-        #region Methods
-
-        public string Calculate(string operation, double firstNumber, double secondNumber, out bool error)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(operation))
-                {
-                    error = false;
-                    switch (operation)
-                    {
-                        case AdditionSymbol:
-                        {
-                            return Addition(firstNumber, secondNumber).ToString();
-                        }
-                        case SubtractionSymbol:
-                        {
-                            return Subtraction(firstNumber, secondNumber).ToString();
-                        }
-                        case MultiplicationSymbol:
-                        {
-                            return Multiplication(firstNumber, secondNumber).ToString();
-                        }
-                        case DivisionSymbol:
-                        {
-                            (double result, string error) divisionResult = Division(firstNumber, secondNumber);
-                            if (divisionResult.result == 0 && !string.IsNullOrEmpty(divisionResult.error))
-                            {
-                                error = true;
-                                return divisionResult.error;
-                            }
-
-                            return divisionResult.result.ToString();
-                        }
-                    }
-                }
-
-                error = true;
-                return string.Empty;
             }
             catch (Exception exception)
             {

@@ -1,5 +1,6 @@
 ﻿using Calculator.Calculators;
 using Calculator.Commands;
+using Calculator.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,7 @@ namespace Calculator.ViewModels
 
         #region Members
 
-        private BasicCalculator basicCalculator;
+        private ICalculate Calculator;
 
         private string helperResult;
         private string inputNumber;
@@ -72,7 +73,7 @@ namespace Calculator.ViewModels
 
         public CalculatorViewModel()
         {
-            basicCalculator = new BasicCalculator();
+            Calculator = new BasicCalculator();
 
             InputNumber = Zero;
             NumericButtonCommand = new Command<string>(NumericButtonClick);
@@ -119,7 +120,7 @@ namespace Calculator.ViewModels
             {
                 if (!string.IsNullOrEmpty(buttonOperation))
                 {
-                    InputNumber = basicCalculator.ValidateComma(InputNumber);
+                    InputNumber = Calculator.ValidateComma(InputNumber);
 
                     switch (buttonOperation)
                     {
@@ -134,7 +135,7 @@ namespace Calculator.ViewModels
                                 else if (string.IsNullOrEmpty(actualOperation) && equalButtonClicked)
                                 {
                                     HelperResult = resultNumberInLastOperation + lastOperation + lastInputNumber + Equal;
-                                    InputNumber = basicCalculator?.Calculate(lastOperation, Convert.ToDouble(resultNumberInLastOperation), Convert.ToDouble(lastInputNumber), out errorOperation).ToString();
+                                    InputNumber = Calculator?.Calculate(lastOperation, Convert.ToDouble(resultNumberInLastOperation), Convert.ToDouble(lastInputNumber), out errorOperation).ToString();
                                 }
                                 else
                                 {
@@ -144,7 +145,7 @@ namespace Calculator.ViewModels
                                     if (!string.IsNullOrEmpty(resultNumberInLastOperation) && !string.IsNullOrEmpty(InputNumber))
                                     {
                                         HelperResult = resultNumberInLastOperation + actualOperation + InputNumber + Equal;
-                                        InputNumber = basicCalculator?.Calculate(actualOperation, Convert.ToDouble(resultNumberInLastOperation), Convert.ToDouble(InputNumber), out errorOperation).ToString();
+                                        InputNumber = Calculator?.Calculate(actualOperation, Convert.ToDouble(resultNumberInLastOperation), Convert.ToDouble(InputNumber), out errorOperation).ToString();
                                     }
                                 }
 
